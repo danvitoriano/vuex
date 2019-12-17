@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/vuex"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>{{welcome}}</h1>
+        <h2>{{message}}</h2>
+        <h3>{{count}}</h3>
+        <button @click="pressed">increment</button>
+    </div>
+    <script>
+    const store = new Vuex.Store({
+        state: {
+            // data to store
+            message: "Olá garotada",
+            count: 0
+        },
+        mutations:{ // sync
+            increment(state, payload){
+                state.count += payload
+            }
+        },
+        actions: { // async
+            increment(state,payload){
+                state.commit('increment', payload)
+            }
+        },
+        getters:{
+            message(state){
+                return state.message.toUpperCase();
+            },
+            counter(state){
+                return state.count
+            }
+        }
+    })
+
+    new Vue({
+        el: "#app",
+        data(){
+            return {
+                welcome: "Hello World"
+            }
+        },
+        computed: {
+            message(){
+                // return store.state.message
+                return store.getters.message
+            },
+            count(){
+                return store.getters.counter
+            }
+        },
+        methods: {
+            pressed(){
+                // store.commit('increment', 10)
+                store.dispatch('increment', 20)
+            }
+        }
+    })
+    </script>
+</body>
+</html>
